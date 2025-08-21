@@ -29,6 +29,7 @@ ENV PATH="$PATH:/root/.asdf/shims"
 RUN asdf global nodejs 20.11.1
 
 RUN npm install
+RUN npm install ws
 RUN npm run build:$BUILD_TYPE
 
 RUN mv build /opt/build
@@ -45,7 +46,16 @@ RUN apt update && apt install -y --no-install-recommends \
     7zip \
     vim \
     cron \
-    jq
+    jq \
+	npm \
+	bash \
+	bash-completion \
+	vim \
+	less \
+	findutils \
+	coreutils \
+	procps \
+	util-linux
 
 WORKDIR /opt/server
 
@@ -56,8 +66,13 @@ ENV FIKA_VERSION=$FIKA_VERSION
 
 COPY entrypoint.sh /usr/bin/entrypoint
 COPY scripts/backup.sh /usr/bin/backup
+RUN chmod 755 /usr/bin/backup
+COPY scripts/profile_updates.sh /usr/bin/profile_updates
+RUN chmod 755 /usr/bin/profile_updates
+
 COPY scripts/download_unzip_install_mods.sh /usr/bin/download_unzip_install_mods
 COPY data/cron/cron_backup_spt /etc/cron.d/cron_backup_spt
+COPY data/cron/cron_spt_profile_update /etc/cron.d/cron_spt_profile_update
 
 # Docker desktop doesn't allow you to configure port mappings unless this is present
 EXPOSE 6969

@@ -1,0 +1,2 @@
+* * * * * root /usr/bin/profile_updates >> /profiles/profile-update.log 2>&1
+
