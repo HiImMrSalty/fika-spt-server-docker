@@ -72,7 +72,10 @@ RUN chmod 755 /usr/bin/profile_updates
 
 COPY scripts/download_unzip_install_mods.sh /usr/bin/download_unzip_install_mods
 COPY data/cron/cron_backup_spt /etc/cron.d/cron_backup_spt
-COPY data/cron/cron_spt_profile_update /etc/cron.d/cron_spt_profile_update
+
+# Requires more testing to be a cron, there are some edge cases to consider.
+# If the server exit would push changes in memory and undo our update, or corrupt a profile
+# COPY data/cron/cron_spt_profile_update /etc/cron.d/cron_spt_profile_update
 
 # Docker desktop doesn't allow you to configure port mappings unless this is present
 EXPOSE 6969

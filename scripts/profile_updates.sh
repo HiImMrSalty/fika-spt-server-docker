@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
 SRC="/profiles"
 DST="/opt/server/user/profiles"

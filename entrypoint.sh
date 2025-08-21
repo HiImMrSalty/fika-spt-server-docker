@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
 build_dir=/opt/build
 mounted_dir=/opt/server
@@ -122,7 +123,7 @@ set_timezone() {
     ln -sf /usr/share/zoneinfo/$TZ /etc/localtime
 
     # If there was actually a change in the timezone or TZ was specified (accounted for here when before_date_hour is not set above)
-    if [[ $before_date_hour != $(date +"%H") ]]; then
+    if [[ ${before_date_hour:-} != $(date +"%H") ]]; then
         echo "Timezone set to $TZ";
     fi
 }
@@ -281,5 +282,8 @@ change_owner
 set_permissions
 
 set_timezone
+
+# One-shot sync on boot (ok if /profiles is mounted; ignore errors)
+/usr/bin/profile_updates || true
 
 su - $(id -nu $uid) -c "cd $mounted_dir && ./SPT.Server.exe"
